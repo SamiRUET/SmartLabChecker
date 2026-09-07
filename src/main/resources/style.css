@@ -1,0 +1,319 @@
+.root {
+
+    -fx-font-family: "Segoe UI", "Arial";
+
+    -fx-background-color: #f4f7fb;
+
+}
+
+
+/* Main title */
+
+#title {
+
+    -fx-font-size: 30px;
+
+    -fx-font-weight: bold;
+
+    -fx-text-fill: #1565c0;
+
+}
+
+
+/* Project label */
+
+#folder {
+
+    -fx-font-size: 16px;
+
+    -fx-text-fill: #37474f;
+
+}
+
+
+/* File count */
+
+#count {
+
+    -fx-font-size: 16px;
+
+    -fx-font-weight: bold;
+
+    -fx-text-fill: #2e7d32;
+
+}
+
+
+
+/* List */
+
+.list-view {
+
+    -fx-background-color: white;
+
+    -fx-border-color: #d0d7de;
+
+    -fx-border-width: 1px;
+
+    -fx-border-radius: 10px;
+
+    -fx-background-radius: 10px;
+
+    -fx-padding: 5px;
+
+}
+
+
+
+.list-cell {
+
+    -fx-font-size: 16px;
+
+    -fx-padding: 12px;
+
+    -fx-text-fill: #263238;
+
+}
+
+
+
+.list-cell:hover {
+
+    -fx-background-color: #e3f2fd;
+
+}
+
+
+
+.list-cell:selected {
+
+    -fx-background-color: #1976d2;
+
+    -fx-text-fill: white;
+
+}
+
+
+
+/* Buttons */
+
+.button {
+
+    -fx-font-size: 15px;
+
+    -fx-font-weight: bold;
+
+    -fx-padding: 10px 25px;
+
+    -fx-background-radius: 10px;
+
+    -fx-cursor: hand;
+
+}
+
+
+
+/* Open button */
+
+
+
+#openButton {
+
+    -fx-background-color: #1563b3;
+    -fx-text-fill: white;
+
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 8;
+
+    -fx-padding: 12px 35px;
+
+    -fx-min-width: 130px;
+    -fx-min-height: 35px;
+
+}
+
+
+
+/* Exit button */
+
+#exitButton {
+
+    -fx-background-color: #b80c08;
+
+    -fx-text-fill: white;
+
+}
+
+
+
+#exitButton:hover {
+
+    -fx-background-color: #b71c1c;
+
+}
+
+
+
+/* Top section */
+
+.vbox {
+
+    -fx-spacing: 12px;
+
+}
+
+
+
+/* Bottom button area */
+
+.hbox {
+
+    -fx-background-color: white;
+
+    -fx-border-color: #eeeeee;
+
+    -fx-border-width: 1px 0 0 0;
+
+}
+
+#project {
+
+    -fx-font-size: 20px;
+    -fx-text-fill: #34495E;
+
+}
+
+
+#count {
+
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: green;
+
+}
+/* ===========================
+   Week 2 AST Table Styling
+   =========================== */
+
+
+.table-view {
+
+    -fx-background-color: white;
+
+    -fx-border-color: #d6d6d6;
+
+    -fx-border-radius: 10;
+
+    -fx-background-radius: 10;
+
+    -fx-padding: 5;
+
+}
+
+
+
+/* Table Header */
+
+.table-view .column-header-background {
+
+    -fx-background-color: #6ab5dd;
+
+    -fx-background-radius: 10 10 0 0;
+
+}
+
+
+
+.table-view .column-header {
+
+    -fx-size: 45px;
+
+    -fx-background-color: transparent;
+
+}
+
+
+
+.table-view .column-header .label {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 18px;
+
+    -fx-font-weight: bold;
+
+}
+
+
+
+
+
+/* Table Rows */
+
+.table-row-cell {
+
+    -fx-background-color: white;
+
+    -fx-border-color: transparent transparent #eeeeee transparent;
+
+    -fx-font-size: 16px;
+
+    -fx-cell-size: 45px;
+
+}
+
+
+
+
+
+/* Hover effect */
+
+.table-row-cell:hover {
+
+    -fx-background-color: #E3F2FD;
+
+}
+
+
+
+
+
+/* Selected row */
+
+.table-row-cell:selected {
+
+    -fx-background-color: #90CAF9;
+
+    -fx-text-fill: black;
+
+}
+
+
+
+
+
+/* Text inside cells */
+
+.table-cell {
+
+    -fx-padding: 10px;
+
+    -fx-alignment: CENTER_LEFT;
+
+    -fx-font-size: 16px;
+
+}
+
+
+
+
+
+/* Remove empty extra lines */
+
+.table-view .placeholder {
+
+    -fx-background-color: white;
+
+}
