@@ -1,138 +1,74 @@
 package com.smartlab.ui;
 
+import com.smartlab.parser.LabPlagiarismDetector;
+import com.smartlab.parser.LabPlagiarismDetector.PlagiarismMatch;
+
 import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.stage.DirectoryChooser;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.control.ListView;
-import java.io.File;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.Priority;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-public class App extends Application{
+import java.io.File;
+import java.util.List;
 
-    public void start(Stage primaryStage){
-        //title
-        primaryStage.setTitle("My JavaFX Project");
+public class App extends Application {
 
-        //label
-        Label title = new Label("JavaFX Project Explorer");
-        title.setId("title");
+    @Override
+    public void start(Stage stage) {
+        stage.setTitle("Plagiarism Detector");
 
-        Label folder = new Label("Select Folder:");
-        folder.setId("folder");
+        Label lblTitle = new Label("Select Student Java Files to Compare:");
+        Button btnSelectFiles = new Button("📄 Select Student Files (Multi-Select)");
+        ListView<String> resultsList = new ListView<>();
+        Label lblSummary = new Label("Status: Ready to scan.");
 
-        //Listview
-        ListView<String> fileList = new ListView<>();
-        fileList.getItems().add("Main.java");
-        fileList.getItems().add("Student.java");
-        fileList.getItems().add("Teacher.java");
+        btnSelectFiles.setOnAction(e -> {
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Select Student Files");
+            // Shows only .java files in the dialog
+            chooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Java Files (*.java)", "*.java")
+            );
 
-        fileList.getSelectionModel().clearSelection();
+            // Opens multi-file picker (Hold Ctrl or Shift to select multiple)
+            List<File> selectedFiles = chooser.showOpenMultipleDialog(stage);
 
+            if (selectedFiles != null && !selectedFiles.isEmpty()) {
+                lblSummary.setText("Scanning " + selectedFiles.size() + " files...");
+                resultsList.getItems().clear();
 
-        //Button
-        Button openButton = new Button("Open Folder");
-        openButton.setId("openButton");
-        openButton.setDisable(true);
-        fileList.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldValue, newValue) -> {
-                    openButton.setDisable(newValue == null);
-                }
-        );
+                // If user selected files inside a folder, scan their parent folder
+                File parentDir = selectedFiles.get(0).getParentFile();
+                List<PlagiarismMatch> matches = LabPlagiarismDetector.scanFolder(parentDir.toPath(), 70.0);
 
-        openButton.setOnAction(e -> {
-
-            DirectoryChooser directoryChooser = new DirectoryChooser();
-
-            directoryChooser.setTitle("Choose a Folder");
-
-            File selectedFolder =
-                    directoryChooser.showDialog(primaryStage);
-
-            if (selectedFolder != null) {
-                openButton.getStyleClass().add("selected");
-
-                folder.setText(
-                        "Selected Folder: " + selectedFolder.getAbsolutePath()
-                );
-
-
-                fileList.getItems().clear();
-
-
-                File[] files = selectedFolder.listFiles();
-
-                if (files != null) {
-
-                    for (File file : files) {
-
-                        if (file.isFile()) {
-
-                            fileList.getItems().add(
-                                    file.getName()
-                            );
-                        }
+                if (matches.isEmpty()) {
+                    resultsList.getItems().add("✅ No matching submissions found (Threshold: 70%).");
+                    lblSummary.setText("Status: Clean. No plagiarism detected.");
+                } else {
+                    for (PlagiarismMatch m : matches) {
+                        resultsList.getItems().add(
+                                "🚨 " + m.suspect() + " copied from " + m.original() +
+                                        " | " + String.format("%.1f%%", m.similarity()) + " Match" +
+                                        " | Saved at: " + m.suspectTime()
+                        );
                     }
+                    lblSummary.setText("Status: " + matches.size() + " match(es) detected!");
                 }
             }
         });
 
-        //exit
-        Button exitButton = new Button("Exit");
-        exitButton.setId("exitButton");
+        VBox layout = new VBox(12, lblTitle, btnSelectFiles, resultsList, lblSummary);
+        layout.setPadding(new Insets(15));
+        resultsList.setPrefHeight(320);
 
-        exitButton.setOnAction(e -> {
-            primaryStage.close();
-        });
-
-        HBox buttonBox = new HBox();
-        buttonBox.setPadding(new Insets(10, 0, 0, 0));
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        buttonBox.getChildren().addAll(
-                openButton,
-                spacer,
-                exitButton
-        );
-
-        VBox topBox = new VBox(10);
-        topBox.getChildren().addAll(
-                title,
-                folder
-        );
-
-        BorderPane layout = new BorderPane();
-        layout.setTop(topBox);
-        layout.setCenter(fileList);
-        layout.setBottom(buttonBox);
-
-        Scene scene = new Scene(layout, 600, 450);
-
-
-        //CSS
-        scene.getStylesheets().add(
-                getClass()
-                        .getResource("style.css")
-                        .toExternalForm()
-        );
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-
+        stage.setScene(new Scene(layout, 680, 440));
+        stage.show();
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         launch(args);
     }
 }
-
-
