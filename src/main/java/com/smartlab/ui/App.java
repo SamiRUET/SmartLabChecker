@@ -188,9 +188,12 @@ public class App extends Application {
         xAxis.setLabel("Similarity (%)");
         CategoryAxis yAxis = new CategoryAxis();
         top3Chart = new BarChart<>(xAxis, yAxis);
+
         top3Chart.setTitle("Top 3 Suspicious Similarities");
         top3Chart.setLegendVisible(false);
         top3Chart.setAnimated(false);
+
+        top3Chart.setCategoryGap(30);
 
         layout.getChildren().addAll(statsBox, top3Chart);
         tab.setContent(layout);
