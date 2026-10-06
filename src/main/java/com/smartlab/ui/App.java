@@ -50,7 +50,7 @@ public class App extends Application {
     private FilteredList<PlagiarismMatch> filteredMatches;
 
     // Chart
-    private BarChart<Number, String> top3Chart; // Horizontal bar chart
+    private BarChart< String, Number> top3Chart; // Horizontal bar chart
 
     @Override
     public void start(Stage stage) {
@@ -184,16 +184,20 @@ public class App extends Application {
         );
 
         // Chart Setup (Horizontal Bar Chart)
-        NumberAxis xAxis = new NumberAxis(0, 100, 10);
-        xAxis.setLabel("Similarity (%)");
-        CategoryAxis yAxis = new CategoryAxis();
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Student Comparison");
+
+        NumberAxis yAxis = new NumberAxis(0, 100, 10);
+        yAxis.setLabel("Similarity (%)");
+
         top3Chart = new BarChart<>(xAxis, yAxis);
 
-        top3Chart.setTitle("Top 3 Suspicious Similarities");
+
+        top3Chart.setTitle("Top 5 Suspicious Similarities");
         top3Chart.setLegendVisible(false);
         top3Chart.setAnimated(false);
 
-        top3Chart.setCategoryGap(30);
+        top3Chart.setCategoryGap(10);
 
         layout.getChildren().addAll(statsBox, top3Chart);
         tab.setContent(layout);
@@ -382,13 +386,19 @@ public class App extends Application {
 
         // Update Top 3 Chart
         top3Chart.getData().clear();
-        XYChart.Series<Number, String> series = new XYChart.Series<>();
-        for (int i = 0; i < Math.min(3, allMatches.size()); i++) {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        for (int i = 0; i < Math.min(5, allMatches.size()); i++) {
             PlagiarismMatch m = allMatches.get(i);
             String label = m.studentA() + " ↔ " + m.studentB();
-            series.getData().add(new XYChart.Data<>(m.similarity(), label));
+            series.getData().add(new XYChart.Data<>(label, m.similarity()));
         }
         top3Chart.getData().add(series);
+        top3Chart.applyCss();
+
+        top3Chart.lookupAll(".chart-bar").forEach(bar -> {
+            bar.setStyle("-fx-background-radius: 0;");
+            bar.setScaleX(0.45);
+        });
     }
 
     private void applyFilter(String filterText) {
